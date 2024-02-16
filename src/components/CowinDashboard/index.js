@@ -14,7 +14,12 @@ const apiStatusConstants = {
 }
 
 class CowinDashboard extends Component {
-  state = {apiStatus:apiStatusConstants.initial, coverage: [],age:[],gender:[]}
+  state = {
+    apiStatus: apiStatusConstants.initial,
+    coverage: [],
+    age: [],
+    gender: [],
+  }
 
   componentDidMount() {
     this.getRender()
@@ -23,32 +28,30 @@ class CowinDashboard extends Component {
   getRender = async () => {
     const response = await fetch('https://apis.ccbp.in/covid-vaccination-data')
     const data = await response.json()
-    console.log(response)
+    // console.log(response)
     if (response.ok === true) {
       const coverageData = data.last_7_days_vaccination.map(each => ({
         vaccineDate: each.vaccine_date,
         dose1: each.dose_1,
         dose2: each.dose_2,
       }))
-      const ageData=data.vaccination_by_age.map(each=>({
-          age:each.age,
-          count:each.count,
+      const ageData = data.vaccination_by_age.map(each => ({
+        age: each.age,
+        count: each.count,
       }))
-      const genderData=data.vaccination_by_gender.map(eac=>({
-          count:each.count,
-          gender:each.gender,
+      const genderData = data.vaccination_by_gender.map(each => ({
+        count: each.count,
+        gender: each.gender,
       }))
-      this.setState({
-        apiStatus:apiStatusConstants.success,
-        coverage:coverageData,
-        age:ageData,
-        gender:genderData,
-      })
+      this.setState(prevState => ({
+        apiStatus: apiStatusConstants.success,
+        coverage: [...prevState.coverage, coverageData],
+        age: [...prevState.age, ageData],
+        gender: [...prevState.gender, genderData],
+      }))
+    } else {
+      this.setState({apiStatus: apiStatusConstants.failure})
     }
-  }
-  if(response.status===401){
-
-    this.setState({apiStatus:apiStatusConstants.failure})
   }
 
   renderLoader = () => (
@@ -57,27 +60,33 @@ class CowinDashboard extends Component {
     </div>
   )
 
-  renderChartsList = () => (
-      const {coverageData,ageData,genderData}=this.state
-    <>
-      <VaccinationCoverage coverageData={coverageData}/>
-      <VaccinationByGender genderData={genderData}>
-      <VaccinationByAge ageData={ageData}/>
-     
-    </>
+  renderChartsList = () => {
+    const {coverageData, ageData, genderData} = this.state
+    console.log(coverageData)
+    return (
+      <>
+        <VaccinationCoverage coverageData={coverageData} />
+        <VaccinationByGender genderData={genderData} />
+        <VaccinationByAge ageData={ageData} />
+      </>
+    )
+  }
+
+  renderFailureView = () => (
+    <div className="failurecont">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/api-failure-view.png"
+        alt="failure view"
+        className="failureimage"
+      />
+      <p className="failuretext">Something Went Wrong</p>
+    </div>
   )
 
-  renderFailureView=()=>(
-      <div className='failurecont'>
-         <img src='https://assets.ccbp.in/frontend/react-js/api-failure-view.png' alt='failure view' className='failureimage'/>
-         <p className='failuretext'>Something Went Wrong</p> 
-      </div>
-  )
+  renderlist = () => {
+    const {apiStatus} = this.state
 
-  renderlist=()=>{
-   const {apiStatus} = this.state
-
-   switch (apiStatus) {
+    switch (apiStatus) {
       case apiStatusConstants.success:
         return this.renderChartsList()
       case apiStatusConstants.failure:
@@ -88,8 +97,9 @@ class CowinDashboard extends Component {
         return null
     }
   }
+
   render() {
-  return (
+    return (
       <div className="maincontainer">
         <div className="logocont">
           <img
@@ -105,4 +115,5 @@ class CowinDashboard extends Component {
     )
   }
 }
+
 export default CowinDashboard
