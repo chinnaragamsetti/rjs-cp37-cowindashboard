@@ -1,1 +1,6 @@
 /* Write your CSS here */
+
+.chart {
+  border: 1px solid red;
+  height: 100%;
+}

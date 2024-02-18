@@ -14,14 +14,14 @@ import {
 const VaccinationCoverage = props => {
   const {coverageData} = props
   const DataFormatter = number => {
-    if (number > 1500) {
+    if (number > 1000) {
       return `${(number / 1000).toString()}k`
     }
     return number.toString()
   }
 
   return (
-    <ResponsiveContainer>
+    <ResponsiveContainer width="100%" height={300}>
       <BarChart
         width={1000}
         height={300}

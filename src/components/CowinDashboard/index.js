@@ -28,6 +28,7 @@ class CowinDashboard extends Component {
   getRender = async () => {
     const response = await fetch('https://apis.ccbp.in/covid-vaccination-data')
     const data = await response.json()
+    this.setState({apiStatus: apiStatusConstants.inProgress})
     // console.log(response)
     if (response.ok === true) {
       const coverageData = data.last_7_days_vaccination.map(each => ({
@@ -43,12 +44,12 @@ class CowinDashboard extends Component {
         count: each.count,
         gender: each.gender,
       }))
-      this.setState(prevState => ({
+      this.setState({
         apiStatus: apiStatusConstants.success,
-        coverage: [...prevState.coverage, coverageData],
-        age: [...prevState.age, ageData],
-        gender: [...prevState.gender, genderData],
-      }))
+        coverage: coverageData,
+        age: ageData,
+        gender: genderData,
+      })
     } else {
       this.setState({apiStatus: apiStatusConstants.failure})
     }
@@ -61,13 +62,22 @@ class CowinDashboard extends Component {
   )
 
   renderChartsList = () => {
-    const {coverageData, ageData, genderData} = this.state
-    console.log(coverageData)
+    const {coverage, age, gender} = this.state
+    console.log(coverage)
     return (
       <>
-        <VaccinationCoverage coverageData={coverageData} />
-        <VaccinationByGender genderData={genderData} />
-        <VaccinationByAge ageData={ageData} />
+        <div className="coveragecontainer">
+          <h1 className="coverage">Vaccination Coverage</h1>
+          <VaccinationCoverage coverageData={coverage} />
+        </div>
+        <div className="coveragecontainer">
+          <h1 className="coverage">Vaccination by gender</h1>{' '}
+          <VaccinationByGender genderData={gender} />
+        </div>
+        <div className="coveragecontainer">
+          <h1 className="coverage">Vaccination by age</h1>
+          <VaccinationByAge ageData={age} />
+        </div>
       </>
     )
   }
@@ -79,7 +89,7 @@ class CowinDashboard extends Component {
         alt="failure view"
         className="failureimage"
       />
-      <p className="failuretext">Something Went Wrong</p>
+      <h1 className="failuretext">Something Went Wrong</h1>
     </div>
   )
 
@@ -109,7 +119,8 @@ class CowinDashboard extends Component {
           />
           <p className="logotext">Co-WIN</p>
         </div>
-        <p className="mainhead">CoWIN Vaccination in India</p>
+        <h1 className="mainhead">CoWIN Vaccination in India</h1>
+
         {this.renderlist()}
       </div>
     )
