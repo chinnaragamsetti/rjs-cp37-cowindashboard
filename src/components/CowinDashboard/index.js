@@ -4,6 +4,8 @@ import Loader from 'react-loader-spinner'
 import VaccinationCoverage from '../VaccinationCoverage'
 import VaccinationByGender from '../VaccinationByGender'
 import VaccinationByAge from '../VaccinationByAge'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+
 import './index.css'
 
 const apiStatusConstants = {
@@ -46,6 +48,7 @@ class CowinDashboard extends Component {
       }))
       this.setState({
         apiStatus: apiStatusConstants.success,
+
         coverage: coverageData,
         age: ageData,
         gender: genderData,
@@ -56,8 +59,8 @@ class CowinDashboard extends Component {
   }
 
   renderLoader = () => (
-    <div className="products-loader-container">
-      <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
+    <div className="products-loader-container" data-testid="loader">
+      <Loader type="TailSpin" color="#00BFFF" height={50} width={50} />
     </div>
   )
 
@@ -71,7 +74,7 @@ class CowinDashboard extends Component {
           <VaccinationCoverage coverageData={coverage} />
         </div>
         <div className="coveragecontainer">
-          <h1 className="coverage">Vaccination by gender</h1>{' '}
+          <h1 className="coverage">Vaccination by gender</h1>
           <VaccinationByGender genderData={gender} />
         </div>
         <div className="coveragecontainer">

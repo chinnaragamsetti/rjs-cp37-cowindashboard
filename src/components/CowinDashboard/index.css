@@ -52,3 +52,7 @@
   color: #ffffff;
   align-self: flex-start;
 }
+.products-loader-container {
+  height: 70vh;
+  width: 100%;
+}
