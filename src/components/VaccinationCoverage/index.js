@@ -6,6 +6,7 @@ import {BarChart, Bar, XAxis, YAxis, Legend} from 'recharts'
 
 const VaccinationCoverage = props => {
   const {coverageData} = props
+  // const {vaccinationDate} = coverageData
   const DataFormatter = number => {
     if (number > 1000) {
       return `${(number / 1000).toString()}k`
@@ -15,7 +16,7 @@ const VaccinationCoverage = props => {
 
   return (
     <BarChart
-      width={1000}
+      width={700}
       height={300}
       data={coverageData}
       margin={{
@@ -23,7 +24,7 @@ const VaccinationCoverage = props => {
       }}
     >
       <XAxis
-        dataKey="vaccinationDate"
+        dataKey="vaccineDate"
         tick={{
           stroke: 'gray',
           strokeWidth: 1,
